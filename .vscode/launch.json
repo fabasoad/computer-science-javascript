@@ -7,6 +7,15 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "sorting.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\sorting.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "index.js",
             "skipFiles": [
                 "<node_internals>/**"

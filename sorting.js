@@ -1,9 +1,9 @@
 // https://www.interviewcake.com/sorting-algorithm-cheat-sheet
 
-const swap = (a, x, y) => {    
-    a[x] = a[x] * a[y];
-    a[y] = a[x] / a[y];
-    a[x] = a[x] / a[y];
+const swap = (a, x, y) => {  
+    const temp = a[x];
+    a[x] = a[y];
+    a[y] = temp;
 };
 
 // worst    best     average   space
@@ -46,35 +46,38 @@ const insertionSort = (a) => {
 
 // worst    best     average   space
 // O(nlgn)  O(nlgn)  O(nlgn)   O(n)
-const mergeSort = (a) => {
+const mergeSort = (arr) => {
     console.log('Merge sort');
-    if (a.length > 2) {
-        const border = Math.floor(a.length / 2);
-        const left = mergeSort(a.slice(0, border));
-        const right = mergeSort(a.slice(border));
-        let leftIndex = 0;
-        let rightIndex = 0;
-        const result = [];
-        while (leftIndex < left.length && rightIndex < right.length) {
-            if (left[leftIndex] < right[rightIndex]) {
-                result.push(left[leftIndex]);
-                leftIndex++;
-            } else {
-                result.push(right[rightIndex]);
-                rightIndex++;
+    const _mergeSort = (a) => {
+        if (a.length > 2) {
+            const border = Math.floor(a.length / 2);
+            const left = _mergeSort(a.slice(0, border));
+            const right = _mergeSort(a.slice(border));
+            let leftIndex = 0;
+            let rightIndex = 0;
+            const result = [];
+            while (leftIndex < left.length && rightIndex < right.length) {
+                if (left[leftIndex] < right[rightIndex]) {
+                    result.push(left[leftIndex]);
+                    leftIndex++;
+                } else {
+                    result.push(right[rightIndex]);
+                    rightIndex++;
+                }
             }
+            return result.concat(leftIndex == left.length
+                ? (rightIndex == right.length
+                    ? []
+                    : right.slice(rightIndex))
+                : left.slice(leftIndex));
+        } else {
+            if (a.length == 2 && a[0] > a[1]) {
+                swap(a, 0, 1);
+            }
+            return a;
         }
-        return result.concat(leftIndex == left.length
-            ? (rightIndex == right.length
-                ? []
-                : right.slice(rightIndex))
-            : left.slice(leftIndex));
-    } else {
-        if (a.length == 2 && a[0] > a[1]) {
-            swap(a, 0, 1);
-        }
-        return a;
     }
+    return _mergeSort([...arr]);
 };
 
 // worst    best     average   space
@@ -88,16 +91,14 @@ const countingSort = (a) => {
     }
     const result = [];
     for (let i = 0; i < counters.length; i++) {
-        if (counters[i] > 0) {
-            for (let j = 0; j < counters[i]; j++) {
-                result.push(i);
-            }
+        for (let j = 0; j < counters[i]; j++) {
+            result.push(i);
         }
     }
     return result;
 };
 
-const sort = countingSort;
+const sort = mergeSort;
 
 const arr = [ 1, 23, 2, 43, 445, 2323, 123, 11, 222, 11, 222 ];
 const res = sort(arr);
